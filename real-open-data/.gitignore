@@ -1,3 +1,6 @@
+# Data
+real-open-data/data-sets/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
