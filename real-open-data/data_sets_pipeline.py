@@ -15,13 +15,12 @@ def etl_data_sets(data_sets_meta):
         url = meta['Resource URL'].replace(' ', '')
         df = extract_data_set(url)
 
-        name = meta['Dataset Name']
-        id = meta['Resource ID'].replace(' ', '')
         if len(df) != 0:
+            name = meta['Dataset Name']
+            id = meta['Resource ID'].replace(' ', '')
+            
             print(f'{name} is usable and will get saved!')
             load_data_set(df, f'{DATA_SETS_DIRECTORY_PATH}{id}-{name}.csv')
-        else:
-            print(f'Dataframe has no rows: {name} store at: {url}')
 
 # Extract
 
