@@ -1,5 +1,5 @@
 # Data
-real-open-data/data-sets/
+data-sets/
 
 # Mac
 .DS_Store
@@ -82,6 +82,7 @@ docs/_build/
 target/
 
 # Jupyter Notebook
+notebooks/
 .ipynb_checkpoints
 
 # IPython
