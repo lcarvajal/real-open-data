@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 
+from .models import Dataset
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the datasets index.")
+    datasets_list = Dataset.objects.order_by("title")
+    context = { 'datasets_list': datasets_list, }
+    return render(request, 'datasets/index.html', context)
 
 def detail(request, dataset_id):
     response = "You're looking at data set %s."
