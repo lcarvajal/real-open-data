@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import loader
+from django.http import Http404
 
 from .models import Dataset
 
@@ -10,9 +10,15 @@ def index(request):
     return render(request, 'datasets/index.html', context)
 
 def detail(request, dataset_id):
-    response = "You're looking at data set %s."
-    return HttpResponse(response % dataset_id)
+    try:
+        dataset = Dataset.objects.get(pk=dataset_id)
+    except Dataset.DoesNotExist:
+        raise Http404("Dataset does not exist")
+    return render(request, "datasets/detail.html", {"dataset": dataset})
 
 def analysis(request, dataset_id):
-    response = "You're looking at the analysis path for data set %s."
-    return HttpResponse(response % dataset_id)
+    try:
+        dataset = Dataset.objects.get(pk=dataset_id)
+    except Dataset.DoesNotExist:
+        raise Http404("Dataset does not exist")
+    return render(request, "datasets/analysis.html", {"dataset": dataset})
