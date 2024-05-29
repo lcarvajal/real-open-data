@@ -1,110 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ dataset.title }}</title>
     <!-- Include Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
     <h1>{{ dataset.title }}</h1>
     <div>
-        <label for="category">Select Category:</label>
-        <select id="category" style="-webkit-appearance: none;">
-            <!-- Options will be populated dynamically -->
+        <select id="filter" style="-webkit-appearance: none;"  onchange="updateChart(this.value)">
+            {% for option in filter_options %}
+                {% if option == current_filter_option %}
+                    <option value="{{ option }}" selected>{{ option }}</option>
+                {% else %}
+                    <option value="{{ option }}" >{{ option }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
     </div>
-    <canvas id="dataChart" width="800" height="400"></canvas>
+    <div id="wrapper" style="height:1000;">
+        <canvas id="chart"></canvas>
+    </div>
 
     {% load static %}
     <script>
-        $(document).ready(function(){
-            // Load initial chart
-            loadDataChart();
-
-            // Function to load chart
-            function loadDataChart(){
-                $.ajax({
-                    url: "{% static dataset.file_path %}", // Path to your CSV file
-                    dataType: "text",
-                    success: function(data) {
-                        var lines = data.split(/\r?\n/);
-                        var categories = [];
-                        for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(",");
-                            var category = values[0]; // First column, generic category
-                            if (!categories.includes(category)) {
-                                categories.push(category);
-                                $('#category').append($('<option>', {
-                                    value: category,
-                                    text: category
-                                }));
-                            }
-                        }
-                        // Trigger chart loading for the default selected category
-                        var defaultCategory = $('#category').val();
-                        loadData(defaultCategory);
+        function makeChart() {
+            var chartData = {{ json_data|safe }};
+            var chart = new Chart('chart', {
+                type: "line",
+                options: {
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
                     }
-                });
-            }
-
-            // Event listener for category selection
-            $('#category').change(function(){
-                var category = $(this).val();
-                loadData(category);
+                },
+                data: chartData
             });
+        }
 
-            // Variable to store the chart instance
-            var dataChart;
+        function updateChart(val) {
+            var filterOption = $('#filter').find(":selected").val();
+            window.location.replace("{% url 'datasets:detail' dataset_id=dataset.id %}?x=REF_YEAR&filter=DISTRICT_CODE&filter_value=temp".replace('temp', filterOption))
+        }
 
-            // Function to load data chart
-            function loadData(category){
-                $.ajax({
-                    url: "{% static dataset.file_path %}", // Path to your CSV file
-                    dataType: "text",
-                    success: function(data) {
-                        var lines = data.split(/\r?\n/);
-                        var labels = [];
-                        var values = [];
-                        for (var i = 1; i < lines.length; i++) {
-                            var row = lines[i].split(",");
-                            if (row[0] === category) {
-                                labels.push(row[1]); // Second column, generic label
-                                values.push(parseFloat(row[2])); // Third column, generic value
-                            }
-                        }
-                        var ctx = document.getElementById('dataChart').getContext('2d');
-                        // Check if there's an existing chart instance, destroy it if so
-                        if(dataChart){
-                            dataChart.destroy();
-                        }
-                        dataChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: category,
-                                    data: values,
-                                    borderColor: 'rgb(75, 192, 192)',
-                                    borderWidth: 2,
-                                    fill: false
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        makeChart()
     </script>
 </body>
+
 </html>
