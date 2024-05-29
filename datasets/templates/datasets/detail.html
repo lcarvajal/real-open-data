@@ -3,91 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Population Change Chart</title>
+    <title>{{ dataset.title }}</title>
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Population Change Chart</h1>
+    <h1>{{ dataset.title }}</h1>
     <div>
-        <label for="district">Select District:</label>
-        <select id="district" style="-webkit-appearance: none;">
+        <label for="category">Select Category:</label>
+        <select id="category" style="-webkit-appearance: none;">
             <!-- Options will be populated dynamically -->
         </select>
     </div>
-    <canvas id="populationChart" width="800" height="400"></canvas>
+    <canvas id="dataChart" width="800" height="400"></canvas>
 
     {% load static %}
     <script>
         $(document).ready(function(){
             // Load initial chart
-            loadChart();
+            loadDataChart();
 
             // Function to load chart
-            function loadChart(){
+            function loadDataChart(){
                 $.ajax({
                     url: "{% static dataset.file_path %}", // Path to your CSV file
                     dataType: "text",
                     success: function(data) {
                         var lines = data.split(/\r?\n/);
-                        var districtCodes = [];
+                        var categories = [];
                         for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(";");
-                            var districtCode = values[1]; // DISTRICT_CODE
-                            if (!districtCodes.includes(districtCode)) {
-                                districtCodes.push(districtCode);
-                                $('#district').append($('<option>', {
-                                    value: districtCode,
-                                    text: 'District ' + districtCode
+                            var values = lines[i].split(",");
+                            var category = values[0]; // First column, generic category
+                            if (!categories.includes(category)) {
+                                categories.push(category);
+                                $('#category').append($('<option>', {
+                                    value: category,
+                                    text: category
                                 }));
                             }
                         }
-                        // Trigger chart loading for the default selected district
-                        var defaultDistrict = $('#district').val();
-                        loadPopulationChart(defaultDistrict);
+                        // Trigger chart loading for the default selected category
+                        var defaultCategory = $('#category').val();
+                        loadData(defaultCategory);
                     }
                 });
             }
 
-            // Event listener for district selection
-            $('#district').change(function(){
-                var districtCode = $(this).val();
-                loadPopulationChart(districtCode);
+            // Event listener for category selection
+            $('#category').change(function(){
+                var category = $(this).val();
+                loadData(category);
             });
 
             // Variable to store the chart instance
-            var populationChart;
+            var dataChart;
 
-            // Function to load population chart
-            function loadPopulationChart(districtCode){
+            // Function to load data chart
+            function loadData(category){
                 $.ajax({
                     url: "{% static dataset.file_path %}", // Path to your CSV file
                     dataType: "text",
                     success: function(data) {
                         var lines = data.split(/\r?\n/);
                         var labels = [];
-                        var populationChanges = [];
+                        var values = [];
                         for (var i = 1; i < lines.length; i++) {
-                            var values = lines[i].split(";");
-                            if (values[1] === districtCode) {
-                                labels.push(values[3]); // REF_YEAR
-                                populationChanges.push(parseInt(values[9])); // POP_CHANGE
+                            var row = lines[i].split(",");
+                            if (row[0] === category) {
+                                labels.push(row[1]); // Second column, generic label
+                                values.push(parseFloat(row[2])); // Third column, generic value
                             }
                         }
-                        var ctx = document.getElementById('populationChart').getContext('2d');
+                        var ctx = document.getElementById('dataChart').getContext('2d');
                         // Check if there's an existing chart instance, destroy it if so
-                        if(populationChart){
-                            populationChart.destroy();
+                        if(dataChart){
+                            dataChart.destroy();
                         }
-                        populationChart = new Chart(ctx, {
+                        dataChart = new Chart(ctx, {
                             type: 'line',
                             data: {
                                 labels: labels,
                                 datasets: [{
-                                    label: 'Population Change',
-                                    data: populationChanges,
+                                    label: category,
+                                    data: values,
                                     borderColor: 'rgb(75, 192, 192)',
                                     borderWidth: 2,
                                     fill: false
