@@ -1,13 +1,110 @@
-<!doctype html>
-<html lang="en-US">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>My test page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Population Change Chart</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
-    {{dataset}}
-</body>
+    <h1>Population Change Chart</h1>
+    <div>
+        <label for="district">Select District:</label>
+        <select id="district" style="-webkit-appearance: none;">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+    <canvas id="populationChart" width="800" height="400"></canvas>
 
+    {% load static %}
+    <script>
+        $(document).ready(function(){
+            // Load initial chart
+            loadChart();
+
+            // Function to load chart
+            function loadChart(){
+                $.ajax({
+                    url: "{% static dataset.file_path %}", // Path to your CSV file
+                    dataType: "text",
+                    success: function(data) {
+                        var lines = data.split(/\r?\n/);
+                        var districtCodes = [];
+                        for (var i = 1; i < lines.length; i++) {
+                            var values = lines[i].split(";");
+                            var districtCode = values[1]; // DISTRICT_CODE
+                            if (!districtCodes.includes(districtCode)) {
+                                districtCodes.push(districtCode);
+                                $('#district').append($('<option>', {
+                                    value: districtCode,
+                                    text: 'District ' + districtCode
+                                }));
+                            }
+                        }
+                        // Trigger chart loading for the default selected district
+                        var defaultDistrict = $('#district').val();
+                        loadPopulationChart(defaultDistrict);
+                    }
+                });
+            }
+
+            // Event listener for district selection
+            $('#district').change(function(){
+                var districtCode = $(this).val();
+                loadPopulationChart(districtCode);
+            });
+
+            // Variable to store the chart instance
+            var populationChart;
+
+            // Function to load population chart
+            function loadPopulationChart(districtCode){
+                $.ajax({
+                    url: "{% static dataset.file_path %}", // Path to your CSV file
+                    dataType: "text",
+                    success: function(data) {
+                        var lines = data.split(/\r?\n/);
+                        var labels = [];
+                        var populationChanges = [];
+                        for (var i = 1; i < lines.length; i++) {
+                            var values = lines[i].split(";");
+                            if (values[1] === districtCode) {
+                                labels.push(values[3]); // REF_YEAR
+                                populationChanges.push(parseInt(values[9])); // POP_CHANGE
+                            }
+                        }
+                        var ctx = document.getElementById('populationChart').getContext('2d');
+                        // Check if there's an existing chart instance, destroy it if so
+                        if(populationChart){
+                            populationChart.destroy();
+                        }
+                        populationChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Population Change',
+                                    data: populationChanges,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    borderWidth: 2,
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
 </html>
