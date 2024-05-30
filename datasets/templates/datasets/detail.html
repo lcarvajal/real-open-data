@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ dataset.title }}</title>
     <!-- Include Chart.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>{{ dataset.title }}</h1>
     <div>
-        <select id="filter" style="-webkit-appearance: none;"  onchange="updateChart(this.value)">
-            {% for option in filter_options %}
-                {% if option == current_filter_option %}
-                    <option value="{{ option }}" selected>{{ option }}</option>
-                {% else %}
-                    <option value="{{ option }}" >{{ option }}</option>
-                {% endif %}
-            {% endfor %}
+      <p>
+        Showing data for {{ filter_title }}: <select id="filter" style="-webkit-appearance: none;" onchange="updateChart(this.value)">
+          {% for option in filter_options %}
+            {% if option == current_filter_option %}
+              <option value="{{ option }}" selected>{{ option }}</option>
+            {% else %}
+              <option value="{{ option }}">{{ option }}</option>
+            {% endif %}
+          {% endfor %}
         </select>
+      </p>
     </div>
     <div id="wrapper" style="height:1000;">
-        <canvas id="chart"></canvas>
+      <canvas id="chart"></canvas>
     </div>
 
     {% load static %}
@@ -39,6 +40,20 @@
                     maintainAspectRatio: false,
                     legend: {
                         display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                            display: true,
+                            labelString: '{{ y_title }}',
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                            display: true,
+                            labelString: '{{ x_title }}',
+                            }
+                        }]
                     }
                 },
                 data: chartData
@@ -52,6 +67,5 @@
 
         makeChart()
     </script>
-</body>
-
+  </body>
 </html>

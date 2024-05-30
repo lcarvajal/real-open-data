@@ -40,8 +40,10 @@ def detail(request, dataset_id):
 
     context = {
         'dataset': dataset,
-        'filter_title': filter_column,
+        'filter_title': filter_column.replace("_", " ").lower(),
         'filter_options': df[filter_column].unique(),
+        'x_title': x_column.replace("_", " ").lower(),
+        'y_title': y_column.replace("_", " ").lower(),
         'current_filter_option': current_filter_option,
         'json_data': json_data
     }
