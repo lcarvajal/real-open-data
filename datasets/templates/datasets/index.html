@@ -11,7 +11,7 @@
     {% if datasets_list %}
     <ul>
         {% for dataset in datasets_list %}
-        <li><a href="{% url 'datasets:detail' dataset_id=dataset.id %}?x=REF_YEAR&filter=DISTRICT_CODE&filter_value=91700
+        <li><a href="{% url 'datasets:detail' dataset_id=dataset.id %}
             ">{{ dataset.title }}</a></li>
         {% endfor %}
     </ul>
