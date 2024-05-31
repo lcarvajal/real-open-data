@@ -62,7 +62,7 @@
 
         function updateChart(val) {
             var filterOption = $('#filter').find(":selected").val();
-            window.location.replace("{% url 'datasets:detail' dataset_id=dataset.id %}?x=REF_YEAR&filter=DISTRICT_CODE&filter_value=temp".replace('temp', filterOption))
+            window.location.replace("{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp".replace('temp', filterOption))
         }
 
         makeChart()
