@@ -1,10 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 
-import json
 from .models import Dataset, Chart
-import os
-import pandas as pd
 
 def index(request):
     datasets_list = Dataset.objects.order_by("title")
@@ -13,41 +10,12 @@ def index(request):
 
 def detail(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
-    charts = dataset.chart_set.all()
-    selected_chart = charts[0]
-
-    file_path = os.path.join(settings.STATIC_ROOT, dataset.file_path)
-    df = pd.read_csv(file_path)
-
-    # JSON data for chart generation
-    current_filter_option = request.GET.get('filter_value')
-    if current_filter_option is None:
-        current_filter_option = 91700
-
-    current_filter_option = int(current_filter_option)
-    filtered_df = df[df[selected_chart.filter_column] == current_filter_option]
-    labels = filtered_df[selected_chart.x_column].tolist()
-    data = filtered_df[selected_chart.y_column].tolist()
-    chart_data = {
-        "labels": labels,
-        "datasets": [{
-            "data": data
-        }]
-    }
-
-    chart = {
-        "x_title": selected_chart.x_column.replace("_", " ").lower(),
-        "y_title": selected_chart.y_column.replace("_", " ").lower(),
-        "json_data": chart_data,
-        "type": selected_chart.chart_type.name
-    }
+    selected_chart = dataset.chart_set.first()
+    filter_value = request.GET.get('filter_value')
 
     context = {
         "dataset": dataset,
-        "current_filter_option": current_filter_option,
-        "filter_title": selected_chart.filter_column.replace("_", " ").lower(),
-        "filter_options": df[selected_chart.filter_column].unique(),
-        "chart": chart
+        "chart": selected_chart.get_context(filter_value)
     }
 
     return render(request, 'datasets/detail.html', context)

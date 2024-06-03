@@ -1,4 +1,8 @@
 from django.db import models
+from django.conf import settings
+
+import os
+import pandas as pd
 
 # Create your models here.
 
@@ -13,6 +17,10 @@ class Dataset(models.Model):
     # Displays the title when the dataset is displayed in the console or admin
     def __str__(self):
         return self.title
+    
+    def get_data_frame(self):
+        file_path = os.path.join(settings.STATIC_ROOT, self.file_path)
+        return pd.read_csv(file_path)
     
 class ChartType(models.Model):
     name = models.CharField(max_length=80)
@@ -31,3 +39,33 @@ class Chart(models.Model):
 
     def __str__(self):
         return self.dataset.title
+    
+    def get_context(self, filter_value):
+        chart_df = self.dataset.get_data_frame()
+
+        if filter_value:
+            filtered_chart_df = chart_df[chart_df[self.filter_column] == int(filter_value)]
+            labels = filtered_chart_df[self.x_column].tolist()
+            data = filtered_chart_df[self.y_column].tolist()
+        else:
+            labels = chart_df[self.x_column].tolist()
+            data = chart_df[self.y_column].tolist()
+        
+        chart_data = {
+            "labels": labels,
+            "datasets": [{
+                "data": data
+            }]
+        }
+
+        context = {
+            "filter_value": filter_value,
+            "filter_title": self.filter_column.replace("_", " ").lower(),
+            "filter_options": chart_df[self.filter_column].unique().astype(str).tolist(),
+            "x_title": self.x_column.replace("_", " ").lower(),
+            "y_title": self.y_column.replace("_", " ").lower(),
+            "json_data": chart_data,
+            "type": self.chart_type.name,
+        }
+
+        return context

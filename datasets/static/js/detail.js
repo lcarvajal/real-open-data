@@ -1,8 +1,6 @@
 function makeChart() {
     let chartData = JSON.parse(document.getElementById('chart-data').textContent);
 
-    console.log(chartData)
-    console.log(typeof chartData)
     var chart = new Chart('chart', {
         type: chartData.type,
         options: {

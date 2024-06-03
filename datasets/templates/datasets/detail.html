@@ -15,9 +15,9 @@
     <h1>{{ dataset.title }}</h1>
     <div>
       <p>
-        Showing data for {{ filter_title }}: <select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp" style="-webkit-appearance: none;" onchange="updateChart(this.value)">
-          {% for option in filter_options %}
-            {% if option == current_filter_option %}
+        Showing data for {{ chart.filter_title }}: <select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp" style="-webkit-appearance: none;" onchange="updateChart(this.value)">
+          {% for option in chart.filter_options %}
+            {% if option == chart.filter_value %}
               <option value="{{ option }}" selected>{{ option }}</option>
             {% else %}
               <option value="{{ option }}">{{ option }}</option>
