@@ -1,8 +1,9 @@
 function makeChart() {
-    let chartData = JSON.parse(document.getElementById('chart-data').textContent);
+    let chart = JSON.parse(document.getElementById('chart-data').textContent);
 
-    var chart = new Chart('chart', {
-        type: chartData.type,
+    // Using Chart.js to create a chart
+    new Chart('chart', {
+        type: chart.type,
         options: {
             maintainAspectRatio: false,
             legend: {
@@ -12,18 +13,23 @@ function makeChart() {
                 yAxes: [{
                     scaleLabel: {
                     display: true,
-                    labelString: chartData.y_title,
+                    labelString: chart.y_title,
                     }
                 }],
                 xAxes: [{
                     scaleLabel: {
                     display: true,
-                    labelString: chartData.x_title,
+                    labelString: chart.x_title,
                     }
                 }]
             }
         },
-        data: chartData.json_data
+        data: {
+            labels: chart.x_labels,
+            datasets: [{
+                data: chart.y_values
+            }]
+        }
     });
 }
 

@@ -45,27 +45,19 @@ class Chart(models.Model):
 
         if filter_value:
             filtered_chart_df = chart_df[chart_df[self.filter_column] == int(filter_value)]
-            labels = filtered_chart_df[self.x_column].tolist()
-            data = filtered_chart_df[self.y_column].tolist()
+            x_labels = filtered_chart_df[self.x_column].tolist()
+            y_values = filtered_chart_df[self.y_column].tolist()
         else:
-            labels = chart_df[self.x_column].tolist()
-            data = chart_df[self.y_column].tolist()
-        
-        chart_data = {
-            "labels": labels,
-            "datasets": [{
-                "data": data
-            }]
-        }
+            x_labels = chart_df[self.x_column].tolist()
+            y_values = chart_df[self.y_column].tolist()
 
-        context = {
+        return {
             "filter_value": filter_value,
             "filter_title": self.filter_column.replace("_", " ").lower(),
             "filter_options": chart_df[self.filter_column].unique().astype(str).tolist(),
             "x_title": self.x_column.replace("_", " ").lower(),
+            "x_labels": x_labels,
             "y_title": self.y_column.replace("_", " ").lower(),
-            "json_data": chart_data,
+            "y_values": y_values,
             "type": self.chart_type.name,
         }
-
-        return context
