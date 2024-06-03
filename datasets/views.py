@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from .models import Dataset, Chart
+from .models import Dataset
 
 def index(request):
     datasets_list = Dataset.objects.order_by("title")
