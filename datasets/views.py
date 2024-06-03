@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404, render
-from django.conf import settings
 
 from .models import Dataset, Chart
 
