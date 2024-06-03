@@ -19,7 +19,3 @@ def detail(request, dataset_id):
     }
 
     return render(request, 'datasets/detail.html', context)
-
-def analysis(request, dataset_id):
-    dataset = get_object_or_404(Dataset, pk=dataset_id)
-    return render(request, 'datasets/analysis.html', { 'dataset': dataset })
