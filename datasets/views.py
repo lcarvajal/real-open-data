@@ -29,21 +29,25 @@ def detail(request, dataset_id):
     labels = filtered_df[selected_chart.x_column].tolist()
     data = filtered_df[selected_chart.y_column].tolist()
     chart_data = {
-        'labels': labels,
-        'datasets': [{
-            'data': data
+        "labels": labels,
+        "datasets": [{
+            "data": data
         }]
     }
-    json_data = json.dumps(chart_data)
+
+    chart = {
+        "x_title": selected_chart.x_column.replace("_", " ").lower(),
+        "y_title": selected_chart.y_column.replace("_", " ").lower(),
+        "json_data": chart_data,
+        "type": selected_chart.chart_type.name
+    }
 
     context = {
-        'dataset': dataset,
-        'filter_title': selected_chart.filter_column.replace("_", " ").lower(),
-        'filter_options': df[selected_chart.filter_column].unique(),
-        'x_title': selected_chart.x_column.replace("_", " ").lower(),
-        'y_title': selected_chart.y_column.replace("_", " ").lower(),
-        'current_filter_option': current_filter_option,
-        'json_data': json_data
+        "dataset": dataset,
+        "current_filter_option": current_filter_option,
+        "filter_title": selected_chart.filter_column.replace("_", " ").lower(),
+        "filter_options": df[selected_chart.filter_column].unique(),
+        "chart": chart
     }
 
     return render(request, 'datasets/detail.html', context)

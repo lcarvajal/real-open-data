@@ -15,7 +15,7 @@
     <h1>{{ dataset.title }}</h1>
     <div>
       <p>
-        Showing data for {{ filter_title }}: <select id="filter" style="-webkit-appearance: none;" onchange="updateChart(this.value)">
+        Showing data for {{ filter_title }}: <select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp" style="-webkit-appearance: none;" onchange="updateChart(this.value)">
           {% for option in filter_options %}
             {% if option == current_filter_option %}
               <option value="{{ option }}" selected>{{ option }}</option>
@@ -31,41 +31,7 @@
     </div>
 
     {% load static %}
-    <script>
-        function makeChart() {
-            var chartData = {{ json_data|safe }};
-            var chart = new Chart('chart', {
-                type: "line",
-                options: {
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                            display: true,
-                            labelString: '{{ y_title }}',
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                            display: true,
-                            labelString: '{{ x_title }}',
-                            }
-                        }]
-                    }
-                },
-                data: chartData
-            });
-        }
-
-        function updateChart(val) {
-            var filterOption = $('#filter').find(":selected").val();
-            window.location.replace("{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp".replace('temp', filterOption))
-        }
-
-        makeChart()
-    </script>
+    {{ chart|json_script:"chart-data" }}
+    <script src="{% static 'js/detail.js' %}"></script>
   </body>
 </html>
