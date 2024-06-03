@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ dataset.title }}</title>
-    <!-- Include Chart.js library -->
+    <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <!-- Include jQuery library -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
 
@@ -16,6 +16,7 @@
     <div>
       <p>
         Showing data for {{ chart.filter_title }}:<select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp" style="-webkit-appearance: none;">
+          <!-- Creates a list of filter options to choose from -->
           {% for option in chart.filter_options %}
             {% if option == chart.filter_value %}
               <option value="{{ option }}" selected>{{ option }}</option>
@@ -27,9 +28,11 @@
       </p>
     </div>
     <div id="wrapper" style="height:1000;">
+      <!-- Displays chart -->
       <canvas id="chart"></canvas>
     </div>
 
+    <!-- Makes django variables available in JavaScript without HTML injection or Cross-Site Scripting Vulnerability -->
     {% load static %}
     {{ chart|json_script:'chart-data' }}
     <script src="{% static 'js/detail.js' %}"></script>
