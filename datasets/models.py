@@ -40,21 +40,27 @@ class Chart(models.Model):
     def __str__(self):
         return self.dataset.title
     
+    def get_first_filter_value(self):
+        dataset_df = self.dataset.get_data_frame()
+        return dataset_df[self.filter_column].unique()[0]
+
     def get_context(self, filter_value):
-        chart_df = self.dataset.get_data_frame()
+        dataset_df = self.dataset.get_data_frame()
 
         if filter_value:
-            filtered_chart_df = chart_df[chart_df[self.filter_column] == int(filter_value)]
-            x_labels = filtered_chart_df[self.x_column].tolist()
-            y_values = filtered_chart_df[self.y_column].tolist()
+            print(filter_value)
+            filtered_dataset_df = dataset_df[dataset_df[self.filter_column] == int(filter_value)]
+            x_labels = filtered_dataset_df[self.x_column].tolist()
+            y_values = filtered_dataset_df[self.y_column].tolist()
         else:
-            x_labels = chart_df[self.x_column].tolist()
-            y_values = chart_df[self.y_column].tolist()
+            print('no filter value')
+            x_labels = dataset_df[self.x_column].tolist()
+            y_values = dataset_df[self.y_column].tolist()
 
         return {
             "filter_value": filter_value,
             "filter_title": self.filter_column.replace("_", " ").lower(),
-            "filter_options": chart_df[self.filter_column].unique().astype(str).tolist(),
+            "filter_options": dataset_df[self.filter_column].unique().astype(str).tolist(),
             "x_title": self.x_column.replace("_", " ").lower(),
             "x_labels": x_labels,
             "y_title": self.y_column.replace("_", " ").lower(),
