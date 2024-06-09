@@ -47,6 +47,7 @@ class Chart(models.Model):
     def get_context(self, filter_value):
         dataset_df = self.dataset.get_data_frame()
 
+        print(f'ff filter: { filter_value }')
         if filter_value:
             filtered_dataset_df = dataset_df[dataset_df[self.filter_column] == int(filter_value)]
             x_labels = filtered_dataset_df[self.x_column].tolist()

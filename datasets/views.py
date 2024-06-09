@@ -16,6 +16,8 @@ def detail(request, dataset_id):
         first_filter_value = selected_chart.get_first_filter_value()
         filter_value = first_filter_value.astype(str)
 
+    print(filter_value)
+
     context = {
         "dataset": dataset,
         "chart": selected_chart.get_context(filter_value)
