@@ -1,3 +1,5 @@
+<img src="https://lcarvajal.github.io/img/open-data-austria.png" height=100>
+
 # Real Open Data
 
 A Django web app that makes data from [Open Data Austria](https://www.data.gv.at/en/) more accessible to less data-savvy people.
