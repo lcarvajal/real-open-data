@@ -15,11 +15,13 @@
 
 {% block content %}
 
-<h1>{{ dataset.title }}</h1>
-  
+<div class="row  pt-3 pb-3">
+  <h1>{{ dataset.title }}</h1>
+</div>
+
 <div class="row">
   <p>
-    Showing data for {{ chart.filter_title }}:<select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp" style="-webkit-appearance: none;">
+    Showing data for {{ chart.filter_title }}: <select id="filter" data-url="{% url 'datasets:detail' dataset_id=dataset.id %}?filter_value=temp">
       <!-- Creates a list of filter options to choose from -->
       {% for option in chart.filter_options %}
         {% if option == chart.filter_value %}
@@ -31,9 +33,11 @@
     </select>
   </p>
 </div>
-<div class="row" id="wrapper" style="height:1000;">
-  <!-- Displays chart -->
-  <canvas id="chart"></canvas>
+<div class="row" id="wrapper">
+  <div class="col">
+    <!-- Displays chart -->
+    <canvas id="chart" height=400></canvas>
+  </div>
 </div>
 
 <!-- Makes django variables available in JavaScript without HTML injection or Cross-Site Scripting Vulnerability -->
