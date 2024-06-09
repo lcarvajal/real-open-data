@@ -1,23 +1,23 @@
-<!doctype html>
-<html lang="en-US">
+{% extends "master.html" %}
 
-<head>
-    <meta charset="utf-8" />
-    <title>My test page</title>
-</head>
+{% block title %}
+Austrian Open Data Sets
+{% endblock %}
 
-<body>
-    <h1>Austrian Open Data Sets</h1>
-    {% if datasets_list %}
-    <ul>
-        {% for dataset in datasets_list %}
-        <li><a href="{% url 'datasets:detail' dataset_id=dataset.id %}
-            ">{{ dataset.title }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No Datasets are available.</p>
-    {% endif %}
-</body>
 
-</html>
+{% block content %}
+
+<h1>Austrian Open Data Sets</h1>
+  
+{% if datasets_list %}
+<ul>
+    {% for dataset in datasets_list %}
+    <li><a href="{% url 'datasets:detail' dataset_id=dataset.id %}
+        ">{{ dataset.title }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Datasets are available.</p>
+{% endif %}
+
+{% endblock %}
