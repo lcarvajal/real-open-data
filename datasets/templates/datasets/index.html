@@ -1,23 +1,26 @@
-{% extends "datasets/master.html" %}
+{% extends 'datasets/master.html' %}
 
 {% block title %}
-Austrian Open Data Sets
+  Austrian Open Data Sets
 {% endblock %}
 
-
 {% block content %}
+  <div class="row">
+    <h1>Austrian Open Data Sets</h1>
+  </div>
 
-<h1>Austrian Open Data Sets</h1>
-  
-{% if datasets_list %}
-<ul>
-    {% for dataset in datasets_list %}
-    <li><a href="{% url 'datasets:detail' dataset_id=dataset.id %}
-        ">{{ dataset.title }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No Datasets are available.</p>
-{% endif %}
-
+  <div class="row">
+    {% if datasets_list %}
+      <ul>
+        {% for dataset in datasets_list %}
+          <li>
+            <a href="{% url 'datasets:detail' dataset_id=dataset.id %}
+        ">{{ dataset.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No Datasets are available.</p>
+    {% endif %}
+  </div>
 {% endblock %}
