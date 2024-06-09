@@ -5,20 +5,26 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <h1>Austrian Open Data Sets</h1>
+  <div class="row pt-3 pb-3">
+    <div class="col">
+        <h1>Data Sets</h1>
+    </div>
   </div>
 
   <div class="row">
     {% if datasets_list %}
-      <ul>
-        {% for dataset in datasets_list %}
-          <li>
-            <a href="{% url 'datasets:detail' dataset_id=dataset.id %}
-        ">{{ dataset.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
+      {% for dataset in datasets_list %}
+        <div class="col-sm-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ dataset.title }}</h5>
+              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+              <a href="{% url 'datasets:detail' dataset_id=dataset.id %}
+  " class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
     {% else %}
       <p>No Datasets are available.</p>
     {% endif %}
