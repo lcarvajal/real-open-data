@@ -48,12 +48,10 @@ class Chart(models.Model):
         dataset_df = self.dataset.get_data_frame()
 
         if filter_value:
-            print(filter_value)
             filtered_dataset_df = dataset_df[dataset_df[self.filter_column] == int(filter_value)]
             x_labels = filtered_dataset_df[self.x_column].tolist()
             y_values = filtered_dataset_df[self.y_column].tolist()
         else:
-            print('no filter value')
             x_labels = dataset_df[self.x_column].tolist()
             y_values = dataset_df[self.y_column].tolist()
 
