@@ -25,7 +25,3 @@ def detail(request, dataset_id):
         "dataset": dataset,
         "chart": selected_chart.get_context(filter_value)
     })
-
-@api_view(['GET'])
-def react(request):
-    return Response({'message': 'Hi!'})
