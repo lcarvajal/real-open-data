@@ -1,6 +1,5 @@
 import './App.css';
-import Datasets from './Datasets';
-import TestReact from './TestReact';
+import Datasets from './components/Datasets';
 
 function App() {
   return (
