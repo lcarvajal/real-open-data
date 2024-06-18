@@ -29,4 +29,4 @@ def detail(request, dataset_id):
 
 @api_view(['GET'])
 def react(request):
-    return Response({'message': 'Hello, world!'})
+    return Response({'message': 'Hi!'})
