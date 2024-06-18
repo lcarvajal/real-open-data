@@ -31,12 +31,6 @@ I developed an ETL pipeline (separate project) extracts 800+ datasets from Open 
  - Django - python manage.py runserver, python manage.py collectstatic
  - PostgreSQL - brew services start postgresql@16
 
-1. Create a `Keys.plist` file in the `Resources` folder
-2. Add the key `mixpanelProjectToken` with the Mixpanel project token
-3. Create a `Resources/knockKnockJokeData.json` file and populate it with an array of JSON joke objects in the form `{"id":1001,"phrases":["Knock, knock.","Who's there?","Tank.","Tank who?","You’re welcome."]}`
-4. Run the app 
-
 ## To-dos
-1. Add support riddles and dad jokes
-2. Allow user to practice telling jokes to the panda
-3. Add fun dancing panda animations (requested by 9-year-old)
+1. Configure app with FastAPI and React
+2. Host app with Docker
