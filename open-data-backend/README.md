@@ -20,8 +20,8 @@ I developed an ETL pipeline (separate project) extracts 800+ datasets from Open 
 - Pandas
 
 ### Web App Technologies
+- React
 - Django
-- Bootstrap
 - Pandas
 
 ## Support
@@ -32,5 +32,4 @@ I developed an ETL pipeline (separate project) extracts 800+ datasets from Open 
  - PostgreSQL - brew services start postgresql@16
 
 ## To-dos
-1. Configure app with FastAPI and React
-2. Host app with Docker
+1. Host app with Docker
