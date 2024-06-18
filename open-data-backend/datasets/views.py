@@ -14,6 +14,7 @@ def index(request):
 @api_view(['GET'])
 def detail(request, dataset_id):
     dataset = get_object_or_404(Dataset, pk=dataset_id)
+    serializer = DatasetSerializer(dataset, many=False)
     selected_chart = dataset.chart_set.first()
     filter_value = request.GET.get('filter_value')
 
@@ -22,6 +23,6 @@ def detail(request, dataset_id):
         filter_value = first_filter_value.astype(str)
 
     return Response({
-        "dataset": dataset,
+        "dataset": serializer.data,
         "chart": selected_chart.get_context(filter_value)
     })

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Datasets() {
     const [datasets, setDatasets] = useState([]);
@@ -19,7 +20,9 @@ export default function Datasets() {
             {datasets ? (
                 datasets.map(dataset => (
                     <li key={dataset.id}>
-                        <a>{dataset.title}</a>
+                        <Link to={'/datasets/' + dataset.id}>
+                            {dataset.title}
+                        </Link>
                     </li>
                 ))
             ) : (
