@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
+import Chart from 'chart.js/auto'; // Needed for chart.js to function.
 
 export default function DatasetDetail(props) {
   const [responseData, setResponseData] = useState({});
@@ -24,7 +24,15 @@ export default function DatasetDetail(props) {
       {
         responseData && responseData.dataset ? (
           <>
-            <p>{responseData.dataset.title}</p>
+            <h1>{responseData.dataset.title}</h1>
+            <p>
+              Showing data for {responseData.chart.filter_title}:
+              <select id="filter">
+                {responseData.chart.filter_options.map(option =>
+                  <option key={option} value={option}>{option}</option>
+                )}
+              </select>
+            </p>
             <div>
               <Line data={responseData.chart_data} options={responseData.chart_options} />
             </div>
