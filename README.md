@@ -28,8 +28,9 @@ I developed an ETL pipeline (separate project) extracts 800+ datasets from Open 
 - Vienna data on dogs, population, and unemployment.
 
 ## Setup
- - Django - python manage.py runserver, python manage.py collectstatic
- - PostgreSQL - brew services start postgresql@16
+- React - export NODE_OPTIONS=--openssl-legacy-provider, npm start
+- Django - python manage.py runserver, python manage.py collectstatic
+- PostgreSQL - brew services start postgresql@16
 
 ## To-dos
 1. Host app with Docker
